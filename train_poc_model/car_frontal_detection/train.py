@@ -10,7 +10,7 @@ def train_yolo():
     model = YOLO("yolo11m.pt")  # Load pre-trained YOLO model 
     
     model.train(
-        data="C:/Users/user/Documents/VScode/poc-model/src/car_frontal_detection/data_detect.yaml",  # Dataset path
+        data="data.yaml",  # Dataset path
         epochs=50,               # Increased epochs due to smaller dataset
         batch=4,                 # Keep batch size moderate for stability
         device="cuda",           # Use GPU

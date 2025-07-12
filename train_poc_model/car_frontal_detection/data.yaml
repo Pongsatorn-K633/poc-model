@@ -1,0 +1,6 @@
+train: Documents/VScode/poc-model/train_poc_model/car_frontal_detection/data/train/images
+val: Documents/VScode/poc-model/train_poc_model/car_frontal_detection/data/valid/images
+test: Documents/VScode/poc-model/train_poc_model/car_frontal_detection/data/test/images
+
+nc: 2
+names: ["Car", "Frontal"]
