@@ -1,6 +1,0 @@
-train: ../data-detect/train/images
-val: ../data-detect/valid/images
-test: ../data-detect/test/images
-
-nc: 2
-names: ["Car", "Frontal"]

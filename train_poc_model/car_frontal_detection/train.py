@@ -1,10 +1,16 @@
-from ultralytics import YOLO
-
 def train_yolo():
-    model = YOLO("yolo11m.pt")  # Load pre-trained YOLO model
-
+    import os
+    from pathlib import Path
+    from ultralytics import YOLO
+    
+     # 1️⃣ switch CWD to the folder containing both .pt files
+    model_dir = Path(__file__).parent.resolve()
+    os.chdir(model_dir)
+        
+    model = YOLO("yolo11m.pt")  # Load pre-trained YOLO model 
+    
     model.train(
-        data="C:/Users/user/Documents/VScode/poc-model/data-detect.yaml",  # Dataset path
+        data="C:/Users/user/Documents/VScode/poc-model/src/car_frontal_detection/data_detect.yaml",  # Dataset path
         epochs=50,               # Increased epochs due to smaller dataset
         batch=4,                 # Keep batch size moderate for stability
         device="cuda",           # Use GPU
