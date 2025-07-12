@@ -1,8 +1,8 @@
 # PoC-model Initial Set Up
 - Download the packages using conda;&nbsp; conda env create -f environment.yml
 - Request the dataset from Tai.
-- run cli/checkCUDA.py before training (If you're using an NVIDIA GPU, CUDA is recommended for faster performance)
-- Update/Recheck the data.yaml on train/valid/test data path (For the model you're going to train)
+- Update/Recheck the data.yaml on train/valid/test data path (Base is C:\\Users\\user\\)
+- run checkCUDA.py before training (If you're using an NVIDIA GPU, CUDA is recommended for faster performance)
 <br>
 <br>
 
