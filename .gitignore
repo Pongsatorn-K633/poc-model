@@ -1,5 +1,5 @@
 # Model
-car_frontal_detection.pt
+model/
 
 # Data File
 data/

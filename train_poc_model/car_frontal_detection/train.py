@@ -12,7 +12,7 @@ def train_yolo():
     model.train(
         data="data.yaml",  # Dataset path
         epochs=50,               # Increased epochs due to smaller dataset
-        batch=4,                 # Keep batch size moderate for stability
+        batch=8,                 # Keep batch size moderate for stability
         device="cuda",           # Use GPU
         lr0=0.0008,              # Lower learning rate for fine-tuning
         lrf=0.0001,              # Final learning rate with decay
@@ -20,11 +20,11 @@ def train_yolo():
         patience=10,              # Stops training early if no improvement
         optimizer="AdamW",       # modern and stable optimizer
         cos_lr=True,             # Smooth learning rate decay
-        amp=True
+        amp=True                 # mixed precision training - reduced GPU memory usage
     )
 
-    # Save the trained model
-    model.save("car_frontal_detection.pt")
+    # Save the trained model **CHANGE THE NAME BEFORE TRAINING AGAIN
+    model.save("model/car_frontal_detection_xxx.pt")
 
 if __name__ == '__main__':
     train_yolo()
