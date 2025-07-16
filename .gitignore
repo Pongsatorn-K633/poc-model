@@ -1,7 +1,13 @@
+# Model
+car_frontal_detection.pt
+
 # Data File
 data/
 data-detect/
 runs/
+cli/dataset_a/city_car/
+cli/dataset_a/resized_images/
+dataset_a/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

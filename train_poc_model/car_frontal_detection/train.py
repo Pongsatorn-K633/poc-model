@@ -17,7 +17,7 @@ def train_yolo():
         lr0=0.0008,              # Lower learning rate for fine-tuning
         lrf=0.0001,              # Final learning rate with decay
         weight_decay=0.0007,     # Slightly increased to prevent overfitting
-        patience=5,              # Stops training early if no improvement
+        patience=10,              # Stops training early if no improvement
         optimizer="AdamW",       # modern and stable optimizer
         cos_lr=True,             # Smooth learning rate decay
         amp=True
