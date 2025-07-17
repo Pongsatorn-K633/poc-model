@@ -1,0 +1,55 @@
+# YOLO Training Configuration File
+# car_frontal_detection.yaml
+
+# Model Configuration
+model:
+  pretrained_model: "yolo11m.pt"  # Pre-trained model to load
+
+# Training Parameters
+training:
+  data_yaml: "data.yaml"          # Dataset configuration file
+  epochs: 50                      # Number of training epochs
+  batch_size: 8                   # Batch size for training
+  device: "cuda"                  # Device to use (cuda/cpu)
+  learning_rate: 0.0008          # Initial learning rate (lr0)
+  final_lr: 0.0001               # Final learning rate (lrf)
+  weight_decay: 0.0007           # Weight decay for regularization
+  patience: 10                    # Early stopping patience
+  optimizer: "AdamW"             # Optimizer type
+  cosine_lr: true                # Use cosine learning rate scheduler
+  mixed_precision: true          # Use mixed precision training (AMP)
+
+# Output Configuration
+output:
+  save_directory: "fine-tune model"         # Directory to save trained model
+  model_name: "car_frontal_detection"  # Base name for saved model
+  use_timestamp: true             # Add timestamp to filename (if false, uses version)
+  version: "v1"                   # Version number (used if use_timestamp is false)
+
+# Optional: Additional training parameters you can add
+# training:
+#   imgsz: 640                    # Image size for training
+#   resume: false                 # Resume training from last checkpoint
+#   save_period: 10               # Save checkpoint every N epochs
+#   val: true                     # Validate during training
+#   plots: true                   # Generate training plots
+#   verbose: true                 # Verbose output
+#   seed: 42                      # Random seed for reproducibility
+#   deterministic: true           # Use deterministic algorithms
+#   single_cls: false             # Train as single-class dataset
+#   rect: false                   # Rectangular training
+#   cos_lr: true                  # Cosine learning rate scheduler
+#   close_mosaic: 10              # Disable mosaic augmentation for last N epochs
+#   hsv_h: 0.015                  # HSV-Hue augmentation
+#   hsv_s: 0.7                    # HSV-Saturation augmentation
+#   hsv_v: 0.4                    # HSV-Value augmentation
+#   degrees: 0.0                  # Rotation augmentation
+#   translate: 0.1                # Translation augmentation
+#   scale: 0.5                    # Scale augmentation
+#   shear: 0.0                    # Shear augmentation
+#   perspective: 0.0              # Perspective augmentation
+#   flipud: 0.0                   # Vertical flip augmentation
+#   fliplr: 0.5                   # Horizontal flip augmentation
+#   mosaic: 1.0                   # Mosaic augmentation
+#   mixup: 0.0                    # Mixup augmentation
+#   copy_paste: 0.0               # Copy-paste augmentation

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "poc_model"
+version = "0.1.0"
+description = "Car detection model"
+authors = [{ name = "Pongsatorn", email = "pong4213@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.8"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

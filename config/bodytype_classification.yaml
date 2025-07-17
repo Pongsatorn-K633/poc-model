@@ -1,0 +1,14 @@
+model:
+  type: "classifier"
+  architecture: "resnet50"
+  num_classes: 5
+
+data:
+  dataset_path: "data/bodytype_classification"
+  image_size: [224, 224]
+
+training:
+  epochs: 80
+  batch_size: 16
+  learning_rate: 0.0005
+  optimizer: "SGD"

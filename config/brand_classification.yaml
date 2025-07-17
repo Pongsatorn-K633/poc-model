@@ -1,0 +1,14 @@
+model:
+  type: "classifier"
+  architecture: "efficientnet_b0"
+  num_classes: 20
+
+data:
+  dataset_path: "data/brand_classification"
+  image_size: [224, 224]
+
+training:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.001
+  optimizer: "Adam"

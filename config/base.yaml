@@ -1,0 +1,15 @@
+# System-wide settings
+system:
+  cuda_enabled: true
+  log_level: INFO
+
+paths:
+  data_root: "data"
+  models_root: "data/models"
+  logs_root: "logs"
+
+# Common training defaults
+training:
+  device: "cuda"
+  mixed_precision: true
+  early_stopping: true
