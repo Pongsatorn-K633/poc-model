@@ -7,7 +7,6 @@ from pathlib import Path
 
 from poc_model.core.config import load_config
 from poc_model.core.logger import setup_logger
-from poc_model.utils.path_utils import get_project_path
 from poc_model.models.car_frontal_detection.car_frontal_train import train_car_frontal_detection
 from poc_model.models.brand_classification.brand_train import train_brand_classification
 from poc_model.models.bodytype_classification.bodytype_train import train_bodytype_classification
@@ -42,7 +41,7 @@ def main():
     logger.info(f"Starting training for {args.model}")
 
     if args.model == "car_frontal":
-        train_car_frontal_detection(config)
+        train_car_frontal_detection()
     elif args.model == "brand":
         # train_brand_classification(config)
         print("Devloping...")

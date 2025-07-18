@@ -23,7 +23,10 @@ def main():
     print("🔍 Checking GPU support...\n")
 
     if has_cuda():
-        print("✅ CUDA-capable NVIDIA GPU detected (torch.cuda.is_available() == True)")
+        import torch
+        device_name = torch.cuda.get_device_name(0)
+        print(f"✅ CUDA-capable NVIDIA GPU detected: {device_name}")
+        print("   torch.cuda.is_available() == True")
         sys.exit(0)
     elif is_macos() and check_amd_on_macos():
         print("⚠️ macOS with AMD or Apple GPU detected (Metal supported)")
