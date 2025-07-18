@@ -2,7 +2,7 @@ from pathlib import Path
 import yaml
 from ultralytics import YOLO
 from datetime import datetime
-from src.poc_model.utils.path_utils import get_project_path
+from poc_model.utils.path_utils import get_project_path
 
 def train_car_frontal_detection():
     script_dir = Path(__file__).parent.resolve()     # scripts/

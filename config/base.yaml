@@ -1,15 +1,26 @@
 # System-wide settings
 system:
-  cuda_enabled: true
   log_level: INFO
 
+# Common paths (relative to project root)
 paths:
   data_root: "data"
-  models_root: "data/models"
+  models_root: "models"
   logs_root: "logs"
+  pretrained_root: "pretrained_model"
 
 # Common training defaults
 training:
-  device: "cuda"
   mixed_precision: true
   early_stopping: true
+  patience: 10
+  save_period: 10
+  val: true
+  plots: true
+  verbose: true
+  seed: 42
+  deterministic: true
+
+# Common data preprocessing settings
+data:
+  image_size: [224, 224]
