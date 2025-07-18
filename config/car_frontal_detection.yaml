@@ -7,8 +7,9 @@ model:
 
 # Training Parameters
 training:
-  data_yaml: "data.yaml"          # Dataset configuration file
-  epochs: 50                      # Number of training epochs
+  data_yaml: "data/car_frontal_detection_data/data.yaml"          # Dataset configuration file
+  epochs: 1                      # Number of training epochs
+  imgsz: 640
   batch_size: 8                   # Batch size for training
   device: "cuda"                  # Device to use (cuda/cpu)
   learning_rate: 0.0008          # Initial learning rate (lr0)
@@ -21,7 +22,7 @@ training:
 
 # Output Configuration
 output:
-  save_directory: "fine-tune model"         # Directory to save trained model
+  save_directory: "weights/finetuned_model"         # Directory to save trained model
   model_name: "car_frontal_detection"  # Base name for saved model
   use_timestamp: true             # Add timestamp to filename (if false, uses version)
   version: "v1"                   # Version number (used if use_timestamp is false)

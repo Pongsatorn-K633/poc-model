@@ -15,6 +15,9 @@
 <br>
 <br>
 
-# Devloping...
-- insert /test folder
-- insert pyproject.toml
+
+
+
+💡 Note: The `scripts/` folder must contain `yolo11n.pt` for AMP support.  
+This file is automatically copied during `setup.bat`.  
+Do not delete unless you override AMP fallback behavior.

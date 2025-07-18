@@ -80,6 +80,15 @@ pip install -r %REQ_FILE%
 echo 🧩 Installing poc-model in editable (dev) mode...
 pip install -e .
 
+:: Step 9: Copy AMP model into scripts folder to avoid download
+echo ♻️ Copying yolo11n.pt for AMP compatibility...
+if exist weights\pretrained_model\yolo11n.pt (
+    copy /Y weights\pretrained_model\yolo11n.pt scripts\yolo11n.pt >nul
+    echo ✅ yolo11n.pt copied to scripts\
+) else (
+    echo ⚠️ Warning: yolo11n.pt not found in weights\pretrained_model
+)
+
 echo.
 echo 🎉 Setup complete!
 echo 👉 To activate the environment later: venv\Scripts\activate

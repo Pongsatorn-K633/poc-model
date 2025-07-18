@@ -47,11 +47,6 @@ def load_config(model_type: str, config_path: Optional[str] = None, device: Opti
     # Find config directory
     config_dir = find_config_dir()
 
-    # Load base config
-    base_config_path = config_dir / "base.yaml"
-    with open(base_config_path) as f:
-        base_config = yaml.safe_load(f)
-
     # Load model-specific config
     if config_path:
         model_config_path = Path(config_path)
@@ -59,10 +54,7 @@ def load_config(model_type: str, config_path: Optional[str] = None, device: Opti
         model_config_path = config_dir / model_configs[model_type]
 
     with open(model_config_path) as f:
-        model_config = yaml.safe_load(f)
-
-    # Merge configurations
-    merged_config = {**base_config, **model_config}
+        merged_config = yaml.safe_load(f)
 
     # Set device - use provided device, or auto-detect
     merged_config['device'] = device if device else get_device()

@@ -1,17 +1,14 @@
 # Model
-model/
 logs/
+weights/finetuned_model/*
+!weights/finetuned_model/.gitkeep
+
 
 # Data File
 data/car_frontal_detection_data
 data/bodytype_classification_data
 data/brand_classification_data
-data-detect/
 runs/
-cli/dataset_a/city_car/
-cli/dataset_a/resized_images/
-dataset_a/
-train_poc_model/car_frontal_detection
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

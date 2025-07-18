@@ -1,0 +1,2 @@
+# This file ensures the finetuned_model directory is tracked in Git
+# while ignoring the actual model files inside it

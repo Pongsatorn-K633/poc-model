@@ -2,57 +2,115 @@ from pathlib import Path
 import yaml
 from ultralytics import YOLO
 from datetime import datetime
-from poc_model.utils.path_utils import get_project_path
+import shutil
+
 
 def train_car_frontal_detection():
-    script_dir = Path(__file__).parent.resolve()     # scripts/
-    root_dir = script_dir.parent                    # project root (poc-model/)
-    config_path = get_project_path("config/car_frontal_detection.yaml")
-    model_path = get_project_path("root_dir/pretrained_model/yolo11m.pt")
-    data_yaml_path = get_project_path("data/car_frontal_detection_data/data.yaml")
+    # 📁 Set up paths
+    script_dir = Path(__file__).parent.resolve()
+    project_root = script_dir.parents[3]  # poc-model/
 
+    config_path = project_root / "config" / "car_frontal_detection.yaml"
+    default_data_yaml = project_root / "data" / "car_frontal_detection_data" / "data.yaml"
+    model_dir = project_root / "weights" / "pretrained_model"
+    model_path = model_dir / "yolo11m.pt"
 
-    # 2️⃣ Load configuration from YAML file
+    # 📖 Load YAML config
     try:
-        with open(config_path, 'r') as file:
-            config = yaml.safe_load(file)
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
     except FileNotFoundError:
-        print(f"❌ Error: Configuration file not found at {config_path}")
+        print(f"❌ Config not found: {config_path}")
         return
     except yaml.YAMLError as e:
-        print(f"❌ YAML parse error: {e}")
+        print(f"❌ YAML error in config: {e}")
         return
 
-    # 3️⃣ Extract configuration sections
-    model_config = config.get('model', {})
-    training_config = config.get('training', {})
-    output_config = config.get('output', {})
+    model_config = config.get("model", {})
+    training_config = config.get("training", {})
+    output_config = config.get("output", {})
 
-    # 4️⃣ Load and validate dataset configuration
-    data_yaml_path = training_config.get('data.yaml', 'data.yaml')
-    if not Path(data_yaml_path).is_absolute():
-        data_yaml_path = model_path / data_yaml_path
+    print("🤖 Pretrained Model -", model_config)
+    print("🤖 Hyperparameters -", training_config)
+
+    # 📁 Resolve dataset YAML
+    data_yaml = training_config.get("data_yaml", str(default_data_yaml))
+    data_yaml_path = Path(data_yaml) if Path(data_yaml).is_absolute() else project_root / data_yaml
 
     try:
-        with open(data_yaml_path, 'r') as file:
-            data_config = yaml.safe_load(file)
+        with open(data_yaml_path, 'r') as f:
+            yaml.safe_load(f)
     except FileNotFoundError:
-        print(f"❌ Error: Dataset YAML not found at {data_yaml_path}")
+        print(f"❌ Dataset YAML not found: {data_yaml_path}")
         return
     except yaml.YAMLError as e:
-        print(f"❌ Dataset YAML parse error: {e}")
+        print(f"❌ YAML error in dataset config: {e}")
         return
 
-    # 5️⃣ Load pretrained model
-    model_name = model_config.get('pretrained_model', 'yolo11m.pt')
-    if not Path(model_name).is_absolute():
-        model_name = model_path / model_name
+    # 📦 Resolve model paths
+    model_file = model_config.get("pretrained_model", "yolo11m.pt")
+    model_path = Path(model_file) if Path(model_file).is_absolute() else model_dir / model_file
 
-    if not Path(model_name).exists():
-        print(f"❌ Model file not found: {model_name}")
+    if not model_path.exists():
+        print(f"❌ Pretrained model not found: {model_path}")
         return
 
-    model = YOLO(str(model_name))
+
+    # 🧠 Load main model and train
+    print(f"✅ Loading main model: {model_path}")
+    print(f"✅ Using dataset config: {data_yaml_path}")
+    print(f"✅ Using training config: {config_path}")
+
+    model = YOLO(str(model_path))
+    results = model.train(
+        data=str(data_yaml_path),
+        epochs=training_config["epochs"],
+        imgsz=training_config["imgsz"],
+        batch=training_config["batch_size"],
+        device=training_config["device"],
+        lr0=training_config["learning_rate"],
+        lrf=training_config["final_lr"],
+        weight_decay=training_config["weight_decay"],
+        patience=training_config["patience"],
+        optimizer=training_config["optimizer"],
+        cos_lr=training_config["cosine_lr"],
+        amp=training_config["mixed_precision"],
+        name=output_config["model_name"],
+        project=str(project_root / output_config["save_directory"])
+    )
+
+    # 💾 Save best model with timestamp and auto-increment version
+    save_dir = project_root / output_config.get("save_directory", "weights/finetuned_model")
+    save_dir.mkdir(parents=True, exist_ok=True)
+
+    # Auto-increment version by checking existing files
+    model_name = output_config.get('model_name', 'car_frontal_detection')
+    existing_files = list(save_dir.glob(f"{model_name}_v*.pt"))
+    
+    if existing_files:
+        # Extract version numbers and find the highest
+        versions = []
+        for file in existing_files:
+            try:
+                version_part = file.stem.split('_v')[-1].split('_')[0]  # Get version before timestamp
+                versions.append(int(version_part))
+            except (ValueError, IndexError):
+                continue
+        next_version = max(versions) + 1 if versions else 1
+    else:
+        next_version = 1
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    model_filename = f"{model_name}_v{next_version}_{timestamp}.pt"
+
+    final_model_path = save_dir / model_filename
+    best_model_path = results.save_dir / "weights" / "best.pt"
+
+    if best_model_path.exists():
+        shutil.copy2(best_model_path, final_model_path)
+        print(f"✅ Best model saved to: {final_model_path}")
+    else:
+        print("❌ Best model not found after training")
 
 if __name__ == '__main__':
     train_car_frontal_detection()
