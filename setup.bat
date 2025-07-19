@@ -12,29 +12,49 @@ echo ===============================
 echo 🧠 Smart Setup for poc-model
 echo ===============================
 
-:: Step 1: Check for Python
+:: Step 0: Check for Python and validate version
 where python >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Python not found. Please install Python 3.8+ and try again.
+    echo ❌ Python not found in PATH.
+    echo 👉 Please install Python 3.8+ from https://www.python.org/downloads/
     pause
     exit /b 1
 )
 
-:: Step 2: Ensure torch is installed to run GPU check
+:: Get major.minor version
+for /f "usebackq delims=" %%i in (`python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"` ) do (
+    set PY_VERSION=%%i
+)
+
+:: Split version manually
+for /f "tokens=1,2 delims=." %%a in ("%PY_VERSION%") do (
+    set PY_MAJOR=%%a
+    set PY_MINOR=%%b
+)
+
+:: Validate version >= 3.8
+set /a VER_CHECK=!PY_MAJOR!*10+!PY_MINOR!
+if !VER_CHECK! LSS 38 (
+    echo ❌ Python version must be at least 3.8 (found: !PY_MAJOR!.!PY_MINOR!)
+    pause
+    exit /b 1
+)
+
+:: Step 1: Ensure torch is installed to run GPU check
 pip show torch >nul 2>&1
 if %errorlevel% neq 0 (
     echo 📦 Installing torch (lightweight check)...
     pip install torch --quiet
 )
 
-:: Step 3: Check for CUDA via PyTorch
+:: Step 2: Check for CUDA via PyTorch
 echo 🔍 Checking GPU support...
 python scripts\check_gpu.py
 if %errorlevel% equ 0 (
     set GPU_SUPPORT=1
 )
 
-:: Step 4: Recommend Conda if GPU is available
+:: Step 3: Recommend Conda if GPU is available
 if %GPU_SUPPORT% equ 1 (
     echo ✅ CUDA-capable NVIDIA GPU detected.
     echo.
@@ -56,7 +76,7 @@ if %GPU_SUPPORT% equ 1 (
     set REQ_FILE=%CPU_REQ%
 )
 
-:: Step 5: Create virtual environment if needed
+:: Step 4: Create virtual environment if needed
 if not exist "%VENV_DIR%\" (
     echo 📦 Creating virtual environment in '%VENV_DIR%'...
     python -m venv %VENV_DIR%
@@ -67,20 +87,20 @@ if not exist "%VENV_DIR%\" (
     )
 )
 
-:: Step 6: Activate virtual environment
+:: Step 5: Activate virtual environment
 echo ✅ Activating virtual environment...
 call %VENV_DIR%\Scripts\activate.bat
 
-:: Step 7: Install dependencies
+:: Step 6: Install dependencies
 echo 📄 Installing dependencies from %REQ_FILE%...
 pip install --upgrade pip
 pip install -r %REQ_FILE%
 
-:: Step 8: Install the project in editable mode using pyproject.toml
+:: Step 7: Install the project in editable mode using pyproject.toml
 echo 🧩 Installing poc-model in editable (dev) mode...
 pip install -e .
 
-:: Step 9: Copy AMP model into scripts folder to avoid download
+:: Step 8: Copy AMP model into scripts folder to avoid download
 echo ♻️ Copying yolo11n.pt for AMP compatibility...
 if exist weights\pretrained_model\yolo11n.pt (
     copy /Y weights\pretrained_model\yolo11n.pt scripts\yolo11n.pt >nul

@@ -1,3 +1,25 @@
+# Setup PoC-model repo
+
+Pre-requisite
+1. install python [Must use python version 3.8 - 3.11]
+2. pip install uv [We recommend using uv for full dependency resolution, which not let you install incompatible versions. It's also faster]
+
+Setup
+1. uv venv .venv  [uv venv .venv --python=python3.10.11 to specific python version]
+2. .venv\Scripts\activate
+3. Install requirements:
+    - If your device contain Nvidia GPU that allow CUDA (and using conda) --> conda env create -f environment.yml
+    - If your device contain Nvidia GPU that allow CUDA (and using uv) --> uv pip install -r requirements/requirements-gpu.txt
+    - If your device contain AMD GPU that allow ROCm --> uv pip install -r requirements/requirements-gpu.txt but change from cu117 to rocm5.6
+    - If your device not contain GPU (Mac) --> uv pip install -r requirements/requirements-cpu.txt
+
+
+
+
+
+
+
+
 # PoC-model Initial Set Up
 - Download the packages using conda;&nbsp; conda env create -f environment.yml
 - Request the dataset from Tai.
